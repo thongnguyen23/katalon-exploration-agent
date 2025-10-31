@@ -1,0 +1,57 @@
+[project]
+name = "katalon-exploration-agent"
+version = "0.1.0"
+description = "Katalon Knowledge Agent - ADK-based agent for Katalon product information"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "ag-ui-adk==0.3.1",
+    "ag-ui-protocol==0.1.7",
+    "annotated-types==0.7.0",
+    "anyio==4.11.0",
+    "fastapi==0.115.12",
+    "fastuuid==0.13.5",
+    "google-adk[a2a]==1.17.0",
+    "google-genai==1.41.0",
+    "pydantic==2.12.1",
+    "pydantic-core==2.41.3",
+    "python-dotenv==1.1.1",
+    "sniffio==1.3.1",
+    "starlette==0.46.2",
+    "typing-extensions==4.15.0",
+    "typing-inspection==0.4.2",
+    "uvicorn==0.35.0",
+    "litellm>=1.0.0",
+    "boto3>=1.35.0"
+]
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.406",
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
+    "pytest-mock>=3.15.1",
+]
+
+[project.scripts]
+katalon-exploration-agent = "src:main"
+
+[build-system]
+requires = ["uv_build>=0.8.18,<0.9.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "src"
+module-root = ""
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--strict-markers",
+    "--tb=short",
+]

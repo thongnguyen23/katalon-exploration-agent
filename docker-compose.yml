@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  katalon-knowledge-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: katalon-knowledge-agent
+    ports:
+      - "8006:8006"
+    environment:
+      # Server Configuration
+      - HOST=${HOST:-0.0.0.0}
+      - PORT=${PORT:-8006}
+      - PYTHONUNBUFFERED=1
+      
+      # Agent Configuration
+      - AGENT_NAME=${AGENT_NAME:-katalon_knowledge_agent}
+      - MODEL_NAME=${MODEL_NAME:-gemini-2.5-flash}
+      
+      # Google API Key for AI services (REQUIRED)
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      
+      # MCP Server URL (REQUIRED)
+      - MCP_PUBLIC_SERVER_URL=${MCP_PUBLIC_SERVER_URL}
+      
+      # A2A Agent Configuration (Optional)
+      - A2A_AGENT_DESCRIPTION=${A2A_AGENT_DESCRIPTION:-An agent that provides information about Katalon products.}
+      - A2A_AGENT_VERSION=${A2A_AGENT_VERSION:-1.0.0}
+      
+    restart: unless-stopped
+    networks:
+      - katalon-knowledge-network
+
+networks:
+  katalon-knowledge-network:
+    driver: bridge
