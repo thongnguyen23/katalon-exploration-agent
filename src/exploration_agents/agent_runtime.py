@@ -15,6 +15,7 @@ from typing import Any, Dict, List
 from shared import get_env, load_config, sanitize_log_data
 from .kb_retriever import kb_search
 from .neighbors import next_steps
+from .section_resolver import resolve_section_id
 
 
 logger = logging.getLogger(__name__)
@@ -30,7 +31,9 @@ def retrieve_context(query: str) -> Dict[str, Any]:
 
     best = hits[0]
     meta = best.get("metadata", {}) or {}
-    section_id = meta.get("x-amz-bedrock-kb-doc-id") or meta.get("bedrock-kb-doc-id")
+    # Try to resolve a section inside the document using the snippet
+    resolved_section_id, confidence, reason = resolve_section_id(best)
+    section_id = resolved_section_id or meta.get("x-amz-bedrock-kb-doc-id") or meta.get("bedrock-kb-doc-id")
 
     # Build citations as presigned URLs when available; fallback to s3 URI
     citations: List[str] = []
@@ -63,6 +66,8 @@ def retrieve_context(query: str) -> Dict[str, Any]:
             {
                 "query": query,
                 "section_id": section_id,
+                "section_resolve_conf": round(confidence, 3),
+                "section_resolve_reason": reason,
                 "tta_ms": payload["tta_ms"],
                 "num_next_steps": len(payload["next_steps"]),
             }

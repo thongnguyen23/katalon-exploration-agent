@@ -11,7 +11,8 @@ OUT_PATH="${2:-}"
 
 export PYTHONPATH=src:${PYTHONPATH:-}
 
-python3 - <<'PY'
+# Pass arguments to Python via argv after '-'
+python3 - "${DOCS_DIR}" "${OUT_PATH:-}" <<'PY'
 import os, sys
 from exploration_agents.graph_builder import build_graph
 
@@ -20,5 +21,4 @@ out = sys.argv[2] if len(sys.argv) > 2 else None
 path = build_graph(docs, out)
 print(path)
 PY
-"${DOCS_DIR}" "${OUT_PATH:-}"
-
+ 

@@ -11,7 +11,7 @@ OUT_PATH="${2:-}"
 
 export PYTHONPATH=src:${PYTHONPATH:-}
 
-python3 - <<'PY'
+python3 - "${S3_PREFIX}" "${OUT_PATH:-}" <<'PY'
 import os, sys
 from exploration_agents.graph_builder import build_graph
 
@@ -20,5 +20,4 @@ out = sys.argv[2] if len(sys.argv) > 2 else None
 path = build_graph(prefix, out)
 print(path)
 PY
-"${S3_PREFIX}" "${OUT_PATH:-}"
 

@@ -1,0 +1,8 @@
+{"src": "generate-steps-with-ai.prerequisites", "dst": "generate-steps-with-ai.view.the.requirement.detail.page", "rel": "next", "w": 1.0}
+{"src": "generate-steps-with-ai.view.the.requirement.detail.page", "dst": "generate-steps-with-ai.prerequisites", "rel": "prev", "w": 1.0}
+{"src": "generate-steps-with-ai.view.the.requirement.detail.page", "dst": "generate-steps-with-ai.generate.test.cases.with.ai", "rel": "next", "w": 1.0}
+{"src": "generate-steps-with-ai.generate.test.cases.with.ai", "dst": "generate-steps-with-ai.view.the.requirement.detail.page", "rel": "prev", "w": 1.0}
+{"src": "generate-steps-with-ai.generate.test.cases.with.ai", "dst": "generate-steps-with-ai.results", "rel": "next", "w": 1.0}
+{"src": "generate-steps-with-ai.results", "dst": "generate-steps-with-ai.generate.test.cases.with.ai", "rel": "prev", "w": 1.0}
+{"src": "generate-steps-with-ai.results", "dst": "generate-steps-with-ai.related.topics", "rel": "next", "w": 1.0}
+{"src": "generate-steps-with-ai.related.topics", "dst": "generate-steps-with-ai.results", "rel": "prev", "w": 1.0}

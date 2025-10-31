@@ -18,6 +18,12 @@ Modules and Responsibilities
 - `src/exploration_agents/agent_runtime.py`
   - `retrieve_context(query)` → response schema
   - Logging per query
+  - Uses `section_resolver.resolve_section_id(hit)` to align KB doc to graph section; logs `section_resolve_conf` and `section_resolve_reason`.
+
+- `src/exploration_agents/section_resolver.py`
+  - Fetches Markdown via presigned URL
+  - Parses sections; matches snippet to section by exact substring or token overlap
+  - Falls back to mapping doc → first H1
 
 Environment
 - Uses `src/shared/config.py` helpers: `load_config`, `get_env*`
