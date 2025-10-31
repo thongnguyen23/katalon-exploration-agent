@@ -40,7 +40,8 @@ def retrieve_context(query: str) -> Dict[str, Any]:
         presigned = h.get("presigned_url")
         citations.append(presigned or uri)
 
-    nexts = next_steps(section_id) if section_id else []
+    raw_nexts = next_steps(section_id) if section_id else []
+    nexts = [{"section_id": e["section_id"], "rel": e["rel"]} for e in raw_nexts]
 
     answer_text = (best.get("content", {}) or {}).get("text")
     if not answer_text:
