@@ -6,6 +6,7 @@ Also resolves S3 citations to presigned URLs for client consumption.
 
 from __future__ import annotations
 
+import os
 import time
 from typing import Any, Dict, List, Tuple
 
@@ -48,7 +49,10 @@ def kb_search(query: str, top_k: int | None = None) -> Tuple[List[Dict[str, Any]
     with an extra field `presigned_url` for citations.
     """
     load_config()
-    kb_id = get_env("KB_ID")
+    # Accept both KB_ID and KNOWLEDGE_BASE_ID for convenience
+    kb_id = os.getenv("KB_ID") or os.getenv("KNOWLEDGE_BASE_ID")
+    if not kb_id:
+        kb_id = get_env("KB_ID")
     top_k = top_k or int(get_env("RETRIEVAL_TOPK", "8"))
 
     client = _bedrock_client()

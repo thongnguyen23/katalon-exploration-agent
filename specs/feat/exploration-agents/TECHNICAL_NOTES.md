@@ -9,6 +9,7 @@ Modules and Responsibilities
   - `kb_search(query, top_k)` → (hits, tta_ms)
   - AWS `bedrock-agent-runtime.retrieve`
   - Resolve S3 presigned URLs for citations
+  - KB ID env: prefers `KB_ID`; falls back to `KNOWLEDGE_BASE_ID`
 
 - `src/exploration_agents/neighbors.py`
   - Load JSONL into memory map: `src -> list[edge]`
