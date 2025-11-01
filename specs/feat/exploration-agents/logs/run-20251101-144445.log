@@ -1,9 +1,0 @@
-2025-11-01 14:44:45,153 INFO [exploration_agents.cli] [run] START s3=arn:aws:s3:::public-mcp-test out=in flatten=False topk=3 graph=artifacts/neighbors.jsonl
-2025-11-01 14:44:45,153 INFO [exploration_agents.cli] [run] KB_ID=D2EM2KMIKG AWS_REGION=us-east-1
-2025-11-01 14:44:45,153 INFO [exploration_agents.cli] [pull] skipped (--no-pull)
-2025-11-01 14:44:45,153 INFO [exploration_agents.cli] [graph] skipped (--no-build); using existing graph if present at artifacts/neighbors.jsonl
-2025-11-01 14:44:45,153 INFO [exploration_agents.cli] [retrieve] query=How do I generate steps with AI in Katalon? (source=file:question.txt)
-2025-11-01 14:44:47,752 INFO [exploration_agents.cli] [retrieve] answer_preview=--- title: Generate test steps in Katalon Studio script view --- import useBaseUrl from '@docusaurus/useBaseUrl'; <p xmlns="http://www.w3.org/1999/xhtml" className="p">Once a new test case is created,
-2025-11-01 14:44:47,752 INFO [exploration_agents.cli] [retrieve] citations=3 next_steps=0 tta_ms=1586
-2025-11-01 14:44:47,753 INFO [exploration_agents.cli] [retrieve] wrote=artifacts/last_response.json
-2025-11-01 14:44:47,753 INFO [exploration_agents.cli] [run] DONE log=specs/feat/exploration-agents/logs/run-20251101-144445.log

@@ -14,9 +14,13 @@ from __future__ import annotations
 
 import html
 import io
+import os
 import re
 import urllib.request
+from pathlib import Path
 from typing import Dict, List, Optional, Tuple
+
+from . import neighbors
 
 
 HEADING_RE = re.compile(r"^(?P<hashes>#{1,6})\s+(?P<title>.+?)\s*$")
@@ -58,6 +62,47 @@ def _fetch_text(uri: str) -> Optional[str]:
         return None
 
 
+from typing import Tuple as _Tuple
+
+
+def _fetch_text_local_or_s3(s3_uri: str) -> _Tuple[Optional[str], Optional[str]]:
+    """Attempt to read Markdown via local mirror or S3 GetObject.
+
+    Order:
+      1) Local path: try in_full/<key> then in/<key>
+      2) S3 GetObject with boto3 (requires credentials)
+    """
+    if not s3_uri.startswith("s3://"):
+        return None, None
+    # Extract bucket/key
+    _, _, rest = s3_uri.partition("s3://")
+    bucket, _, key = rest.partition("/")
+    if not bucket or not key:
+        return None, None
+
+    # Try local mirror
+    for root in ("in_full", "in"):
+        local_path = Path(root) / key
+        if local_path.exists():
+            try:
+                return local_path.read_text(encoding="utf-8"), "local"
+            except Exception:
+                return local_path.read_text(encoding="utf-8", errors="ignore"), "local"
+
+    # Try S3 GetObject
+    try:
+        import boto3  # lazy import
+        region = os.getenv("AWS_REGION") or "us-east-1"
+        s3 = boto3.client("s3", region_name=region)
+        body = s3.get_object(Bucket=bucket, Key=key)["Body"].read()
+        try:
+            return body.decode("utf-8"), "s3"
+        except Exception:
+            return body.decode("utf-8", errors="ignore"), "s3"
+    except Exception:
+        return None, None
+
+
 def _parse_sections(doc_id: str, md: str) -> List[Tuple[str, str]]:
     """Return list of (section_id, section_text) preserving order.
 
@@ -67,7 +112,6 @@ def _parse_sections(doc_id: str, md: str) -> List[Tuple[str, str]]:
     current: Optional[Tuple[str, List[str]]] = None
     current_level = None
 
-    # Ensure there is at least a doc-root section if no H1 present
     def start_section(level: int, title: str):
         nonlocal current, current_level
         anchor = slugify(title) if title else None
@@ -83,14 +127,33 @@ def _parse_sections(doc_id: str, md: str) -> List[Tuple[str, str]]:
             title = m.group("title").strip()
             start_section(level, title)
         else:
-            if current is None:
-                start_section(1, doc_id.split(".")[-1])
-            current[1].append(line)
+            if current is not None:
+                current[1].append(line)
 
     out: List[Tuple[str, str]] = []
     for sid, lines in sections:
         out.append((sid, "\n".join(lines)))
     return out
+
+
+def section_snippet_from_text(doc_id: str, target_section_id: str, md_text: str, max_len: int = 240) -> Optional[str]:
+    """Extract a short, normalized snippet for a given section_id from md_text.
+
+    Returns a plain-text snippet or None if not found.
+    """
+    sections = _parse_sections(doc_id, md_text)
+    body: Optional[str] = None
+    for sid, text in sections:
+        if sid == target_section_id:
+            body = text
+            break
+    if body is None and sections:
+        # fallback to first section body
+        body = sections[0][1]
+    if body:
+        norm = _normalize_text(body)
+        return (norm[: max_len - 1] + "…") if len(norm) > max_len else norm
+    return None
 
 
 def _token_overlap(a: str, b: str) -> float:
@@ -139,8 +202,7 @@ def resolve_section_id(hit: Dict) -> Tuple[Optional[str], float, str]:
     uri = hit.get("presigned_url")
     if not uri:
         uri = ((hit.get("location", {}) or {}).get("s3Location", {}) or {}).get("uri")
-        if uri and uri.startswith("s3://"):
-            uri = None  # cannot fetch directly
+        # keep s3:// uri for alternate fetch path below
 
     # If doc_id is missing, try to derive it from the URI path
     if not doc_id:
@@ -149,7 +211,17 @@ def resolve_section_id(hit: Dict) -> Tuple[Optional[str], float, str]:
         if not doc_id:
             return None, 0.0, "no_doc_id"
 
-    md_text: Optional[str] = _fetch_text(uri) if uri else None
+    # Fetch markdown text: prefer presigned URL; else try local/s3 with s3://
+    md_text: Optional[str] = None
+    fetch_src: Optional[str] = None
+    if uri and uri.startswith("http"):
+        md_text = _fetch_text(uri)
+        if md_text:
+            fetch_src = "presigned"
+    if not md_text:
+        s3_uri = ((hit.get("location", {}) or {}).get("s3Location", {}) or {}).get("uri")
+        if s3_uri and s3_uri.startswith("s3://"):
+            md_text, fetch_src = _fetch_text_local_or_s3(s3_uri)
     if not md_text:
         # Fallback to first H1 mapping when we cannot fetch
         return join_section_id(doc_id, doc_id.split(".")[-1]), 0.3, "fallback_first_h1"
@@ -164,15 +236,22 @@ def resolve_section_id(hit: Dict) -> Tuple[Optional[str], float, str]:
     for sid, body in sections:
         norm_body = _normalize_text(body)
         if norm_snippet and norm_snippet in norm_body:
-            return sid, 0.95, "exact_substring"
+            reason = "exact_substring" if not fetch_src else f"exact_substring|src={fetch_src}"
+            return sid, 0.95, reason
         # Token overlap heuristic
         score = _token_overlap(norm_snippet, norm_body)
         if score > best_score:
             best_score, best_sid = score, sid
-            best_reason = "token_overlap"
+            best_reason = "token_overlap" if not fetch_src else f"token_overlap|src={fetch_src}"
 
     if best_sid and best_score >= 0.5:
         return best_sid, min(0.9, 0.6 + 0.4 * best_score), best_reason
+
+    # Graph prefix fallback: map doc_id -> first section seen in graph
+    if doc_id:
+        sid = neighbors.first_section_for_doc(doc_id)
+        if sid:
+            return sid, 0.5, "graph_prefix"
 
     # Last resort: first section encountered (typically H1)
     return sections[0][0], 0.3, "fallback_first_h1"

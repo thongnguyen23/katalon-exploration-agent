@@ -1,8 +1,0 @@
-2025-11-01 14:30:06,911 INFO [exploration_agents.cli] [run] START s3=arn:aws:s3:::public-mcp-test out=in flatten=True topk=3 graph=artifacts/neighbors.jsonl
-2025-11-01 14:30:06,911 INFO [exploration_agents.cli] [run] KB_ID=D2EM2KMIKG AWS_REGION=us-east-1
-2025-11-01 14:30:06,911 INFO [exploration_agents.cli] [pull] skipped (--no-pull)
-2025-11-01 14:30:07,050 INFO [exploration_agents.cli] [graph] wrote=artifacts/neighbors.jsonl edges=12651
-2025-11-01 14:30:10,222 INFO [exploration_agents.cli] [retrieve] answer_preview=In the **Flow** section, select the flow and click **Generate Test Cases**. <Tabs groupId="testops-version"> <TabItem value={TestOpsG2_TabNameValue} label={TestOpsG2_TabNameLabel}> <img src="/f103cfff
-2025-11-01 14:30:10,222 INFO [exploration_agents.cli] [retrieve] citations=3 next_steps=0 tta_ms=2005
-2025-11-01 14:30:10,222 INFO [exploration_agents.cli] [retrieve] wrote=artifacts/last_response.json
-2025-11-01 14:30:10,222 INFO [exploration_agents.cli] [run] DONE log=specs/feat/exploration-agents/logs/run-py-smoke.log

@@ -80,3 +80,20 @@ def load_graph(path: str | None = None) -> int:
         _GRAPH_PATH = None  # force _load_graph_once to read from env
     _load_graph_once()
     return sum(len(v) for v in _GRAPH.values())
+
+
+def first_section_for_doc(doc_id: str) -> str | None:
+    """Return a likely first section_id for a given doc_id based on the graph.
+
+    Chooses the shortest matching key with prefix 'doc_id.' (fewest segments).
+    """
+    _load_graph_once()
+    prefix = f"{doc_id}."
+    matches = [k for k in _GRAPH.keys() if k.startswith(prefix)]
+    if not matches:
+        return None
+    def score(k: str) -> tuple[int, str]:
+        extra = k[len(prefix):]
+        return (extra.count("."), k)
+    matches.sort(key=score)
+    return matches[0]

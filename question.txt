@@ -1,2 +1,2 @@
-How do I generate steps with AI in Katalon?
+How do I generate test cases in TestOps?
 

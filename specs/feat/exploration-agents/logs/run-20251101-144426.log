@@ -1,4 +1,0 @@
-2025-11-01 14:44:26,071 INFO [exploration_agents.cli] [run] START s3=arn:aws:s3:::public-mcp-test out=in flatten=False topk=3 graph=artifacts/neighbors.jsonl
-2025-11-01 14:44:26,071 INFO [exploration_agents.cli] [run] KB_ID=D2EM2KMIKG AWS_REGION=us-east-1
-2025-11-01 14:44:26,072 INFO [exploration_agents.cli] [pull] skipped (--no-pull)
-2025-11-01 14:44:26,072 INFO [exploration_agents.cli] [graph] skipped (--no-build); using existing graph if present at artifacts/neighbors.jsonl

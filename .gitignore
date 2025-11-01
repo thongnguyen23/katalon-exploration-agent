@@ -50,4 +50,10 @@ htmlcov/
 .DS_Store
 Thumbs.db
 
+# Runtime artifacts and pulled docs
+artifacts/
+in/
+in_full/
+specs/feat/exploration-agents/logs/
+
 artifacts/
