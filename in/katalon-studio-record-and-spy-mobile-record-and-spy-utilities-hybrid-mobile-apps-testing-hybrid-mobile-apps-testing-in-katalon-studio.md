@@ -1,0 +1,16 @@
+---
+hide_title: true
+title: Hybrid mobile apps testing in Katalon Studio
+---
+
+# <a id="id-60jlu1s2" class="anchor_top_offset"/><a id="ariaid-title1" class="anchor_top_offset"/>Hybrid mobile apps testing in <span xmlns="http://www.w3.org/1999/xhtml" className="ph">Katalon Studio</span> 
+
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">Katalon Studio offers limited support to hybrid mobile apps. <a className="xref" href="/katalon-studio/supported-environments-for-katalon-studio-and-katalon-runtime-engine-kre">Supported environments</a></p> 
+<ul xmlns="http://www.w3.org/1999/xhtml" className="ul"><li className="li"><p className="p">For Android: Katalon Studio allows you to capture elements <strong className="ph b">only</strong> using Mobile Recorder or Mobile Spy utility <strong className="ph b">only</strong> in Android mobile apps that are developed by hybrid app frameworks (ex. Flutter, React Native). </p></li><li className="li"><p className="p">For iOS: Katalon Studio <strong className="ph b">does not</strong> provide support for iOS hybrid mobile apps.</p></li></ul> 
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">If elements of a hybrid app are rendered in a native app, the Mobile Recorder/Spy utility can capture elements. You can learn how to capture elements in the Mobile Recorder/Spy utility in the following documents:</p> 
+<ul xmlns="http://www.w3.org/1999/xhtml" className="ul"><li className="li"><a className="xref" href="#">Mobile Recorder Tutorials</a></li><li className="li"><a className="xref" href="/katalon-studio/record-and-spy/mobile-record-and-spy-utilities/spy-mobile-utility">Mobile Spy Tutorials</a></li></ul> 
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">If the elements are rendered in WebView, refer to the following workarounds for capturing these elements:</p> 
+<ul xmlns="http://www.w3.org/1999/xhtml" className="ul"><li className="li"><a className="xref" href="/katalon-studio/record-and-spy/mobile-record-and-spy-utilities/hybrid-mobile-apps-testing/native-render-only-capture-elements-in-hybrid-android-apps">[Native render only] Capture elements in hybrid Android apps</a></li><li className="li"><a className="xref" href="/katalon-studio/record-and-spy/mobile-record-and-spy-utilities/hybrid-mobile-apps-testing/native-render-only-webview-render-capture-elements-in-hybrid-android-apps-in-katalon-studio">[Native render only] [Webview render] Capture elements in hybrid Android apps in <span className="ph">Katalon Studio</span></a></li></ul> 
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">If the elements are rendered in a Flutter-based application, refer to the following workaround:</p> 
+<ul xmlns="http://www.w3.org/1999/xhtml" className="ul"><li className="li"><a className="xref" href="/katalon-studio/keywords/custom-keywords/flutter-based-application-testing-with-custom-settext-keyword-in-katalon-studio">Flutter-based application testing with custom SetText keyword in <span className="ph">Katalon Studio</span></a></li></ul> 
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">Refer to the following topic for supporting environments: <a className="xref" href="/katalon-studio/supported-environments-for-katalon-studio-and-katalon-runtime-engine-kre">Supported environments for Katalon Studio and Katalon Runtime Engine (KRE)</a>.</p> 

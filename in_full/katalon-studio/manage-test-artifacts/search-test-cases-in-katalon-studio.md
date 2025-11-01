@@ -1,0 +1,51 @@
+---
+hide_title: true
+title: Search test cases in Katalon Studio
+---
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+
+# <a id="concept-5684" class="anchor_top_offset"/><a id="ariaid-title1" class="anchor_top_offset"/>Search test cases in <span xmlns="http://www.w3.org/1999/xhtml" className="ph">Katalon Studio</span> 
+
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">Searching manually for test artifacts can be time-consuming. The search function in Katalon Studio helps reduce time spent on searching for the desired test artifacts, based on given criteria.</p> 
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">The search function is used for test artifacts such as test cases, test suites, folders, data files, .groovy files, etc.</p> 
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">There are three ways to use the search function in Katalon Studio: input your search criteria directly in the search bar, use the&nbsp;<span className="ph uicontrol">Advanced Search</span>&nbsp;button or use the&nbsp;<span className="ph uicontrol">Query Builder</span>&nbsp;function.</p> 
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">This article shows you how to view basic information of an object and how to use the search function in Katalon Studio.</p> 
+
+## <a id="concept-1252" class="anchor_top_offset"/>IDs and Properties
+
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">IDs and tags can be helpful when it comes to managing large projects. You can use IDs and tags to find test artifacts in the Search function.</p> 
+
+### <a id="task-3165" class="anchor_top_offset"/>How to get a test artifact ID?
+
+<section xmlns="http://www.w3.org/1999/xhtml" className="section context">To get the ID of a test artifact, do as follows:</section> 
+<ol xmlns="http://www.w3.org/1999/xhtml" className="ol steps"><li className="li step stepexpand"><span className="ph cmd">Navigate to&nbsp;<span className="ph uicontrol">Tests Explorer</span>&nbsp;and find the test artifact that you want to get the ID of.&nbsp;</span></li><li className="li step stepexpand"><span className="ph cmd">Right-click on that test artifact and select&nbsp;<span className="ph uicontrol">Copy ID</span>.</span><div className="itemgroup info"><img className="image" width={500} src={useBaseUrl("/8faaec60-22b2-11ed-9930-0242fe3e4a3f/copy-ID.png")} alt="Copy ID" /></div><div className="itemgroup stepresult">The ID is now copied to your clipboard.</div></li></ol> 
+<section xmlns="http://www.w3.org/1999/xhtml" className="section result">Then, you can paste that ID into the ID text box.</section> 
+
+### <a id="task-5205" class="anchor_top_offset"/>View test artifact properties
+
+<section xmlns="http://www.w3.org/1999/xhtml" className="section context">You can find the ID, name, description, and tag of a test artifact in the&nbsp;<span className="ph uicontrol">Properties</span>&nbsp;view.</section> 
+<div xmlns="http://www.w3.org/1999/xhtml" className="li step p"><span className="ph cmd">Navigate to&nbsp;<span className="ph uicontrol">Tests Explorer</span>. Right-click on that test artifact and select&nbsp;<span className="ph uicontrol">Properties</span>.&nbsp;</span><div className="itemgroup info"><div className="note note note_note"><span className="note__title">Note:</span> <ul className="ul"><li className="li"><p className="p">You cannot view the properties of a folder.</p></li></ul></div></div><div className="itemgroup stepresult">The&nbsp;<span className="ph uicontrol">Properties</span>&nbsp;dialog appears.<p className="p"><img className="image" width={600} src={useBaseUrl("/8faa0200-22b2-11ed-9930-0242fe3e4a3f/tc-properties.png")} alt="Test case properties" /></p></div></div>
+
+## <a id="concept-8462" class="anchor_top_offset"/>The search bar
+
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">Another way to search for test artifacts is to type in the search bar located at the top of the&nbsp;<span className="ph uicontrol">Test Explorer</span>&nbsp;section. You can type in a specific keyword or follow this syntax:&nbsp;<code className="ph codeph">id=(Your_Test_Case_ID)</code>. For example:</p> 
+<p xmlns="http://www.w3.org/1999/xhtml" className="p"><code className="ph codeph">id=(Test Cases/Common Test Cases)</code></p> 
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">All test cases associated with the&nbsp;<code className="ph codeph">Test Cases/Common Test Cases</code>&nbsp;ID are filtered and returned.</p> 
+<p xmlns="http://www.w3.org/1999/xhtml" className="p"><img className="image" width={600} src={useBaseUrl("/8fae47c0-22b2-11ed-9930-0242fe3e4a3f/search-bar.png")} alt="The search bar" /></p> 
+
+## <a id="task-741" class="anchor_top_offset"/>Advanced search
+
+<section xmlns="http://www.w3.org/1999/xhtml" className="section context">The <span className="ph uicontrol">Advanced Search</span> function allows you to find the desired test artifacts based on certain criteria. The <span className="ph uicontrol">Advanced Search</span> button is located on the top right of the <span className="ph uicontrol">Tests Explorer</span> area, next to the search bar.<p className="p"><img className="image" width={500} src={useBaseUrl("/8fa8c980-22b2-11ed-9930-0242fe3e4a3f/KS-SEARCH-Advanced-search-button.png")} alt="Advanced search button" /></p><p className="p">You can also access this function in&nbsp;<span className="ph uicontrol">Action</span> &gt; <span className="ph uicontrol">Advanced Search</span>.</p><p className="p"><img className="image" width={250} src={useBaseUrl("/8fad8470-22b2-11ed-9930-0242fe3e4a3f/KS-SEARCH-Access-advanced-search-function.png")} alt="Access advanced search from main menu" /></p></section> 
+<div xmlns="http://www.w3.org/1999/xhtml" className="li step p"><span className="ph cmd">To use the <span className="ph uicontrol">Advanced Search</span>&nbsp;function, click on the <span className="ph uicontrol">Advanced Search</span>&nbsp;button. The&nbsp;<span className="ph uicontrol">Search</span>&nbsp;dialog appears. Input your search criteria, then click&nbsp;<strong className="ph b"><span className="ph uicontrol">Search</span></strong>.</span><div className="itemgroup info">Katalon will query out all the matching test artifacts in the&nbsp;<strong className="ph b">Search</strong>&nbsp;tab as shown in the following picture:<p className="p"><img className="image" src={useBaseUrl("/8face830-22b2-11ed-9930-0242fe3e4a3f/KS-SEARCH-Search-results.png")} alt="Advanced search results" /></p></div></div>
+
+## <a id="task-8341" class="anchor_top_offset"/>The Query Builder
+
+<section xmlns="http://www.w3.org/1999/xhtml" className="section context">The&nbsp;<span className="ph uicontrol">Query Builder</span>&nbsp;function allows you to find the desired test cases based on certain criteria.</section> 
+<ol xmlns="http://www.w3.org/1999/xhtml" className="ol steps"><li className="li step stepexpand"><span className="ph cmd">You can find the&nbsp;<span className="ph uicontrol">Query Builder</span>&nbsp;function while working with test suites, for example, in a dynamic test suite. See also:<a className="xref" href="/katalon-studio/manage-test-artifacts/dynamic-test-suite/manage-dynamic-test-suites-in-katalon-studio">Dynamic Test Suite</a>.</span><div className="itemgroup info"><img className="image" src={useBaseUrl("/8fa965c0-22b2-11ed-9930-0242fe3e4a3f/query-builder.png")} alt="The query builder" /></div></li><li className="li step stepexpand"><span className="ph cmd">To use the&nbsp;<span className="ph uicontrol">Query Builder</span>&nbsp;function, click on the&nbsp;<span className="ph uicontrol">Query Builder</span>&nbsp;button. The&nbsp;<span className="ph uicontrol">Query Builder</span>&nbsp;dialog appears.</span></li><li className="li step stepexpand"><span className="ph cmd">Input your search criteria, then click&nbsp;<span className="ph uicontrol">Search</span>.</span><div className="itemgroup info"><img className="image" width={500} src={useBaseUrl("/8fabd6c0-22b2-11ed-9930-0242fe3e4a3f/query-builder-dialog.png")} alt="The query builder dialog" /></div><div className="itemgroup info"><p className="p">The Query Builder menu includes:</p><ul className="ul"><li className="li"><strong className="ph b"><span className="ph uicontrol">ID</span></strong>: to search the exact IDs of the test artifact</li><li className="li"><span className="ph uicontrol">Name</span>: to search by the name of the test artifact</li><li className="li"><span className="ph uicontrol">Description</span>: to search by the description associated with the test artifact</li><li className="li"><span className="ph uicontrol">Comment</span>: to search by the comments attached to the test artifacts</li><li className="li"><span className="ph uicontrol">Tag</span>: to search by the tag linked to the test artifacts</li></ul><div className="note note note_note"><span className="note__title">Note:</span> <ul className="ul"><li className="li">Every field in this Query Builder mode can be applied to search for all types of test artifacts such as test cases, test suites, folders, etc.</li><li className="li">You can only search for one keyword at a time when searching by tag, description, or comment.</li></ul></div></div></li></ol> 
+
+## <a id="concept-6917" class="anchor_top_offset"/>Basic Search For Dynamic Test Suite plugin
+
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">You can also use the&nbsp;<span className="ph uicontrol">Basic Search For Dynamic Test Suite</span>&nbsp;plugin to search in a dynamic test suite. This plugin is available in the Katalon Store: <a className="xref j-external-link" href="https://store.katalon.com/product/2/Basic-Search-For-Dynamic-Test-Suite" target="_blank">Basic Search For Dynamic Test Suite Plugin</a>.</p> 
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">To learn more about how to use this plugin, see:<a className="xref" href="/katalon-studio/manage-test-artifacts/dynamic-test-suite/basic-search-for-dynamic-test-suite">Basic Search For Dynamic Test Suite</a>.</p> 
+<p xmlns="http://www.w3.org/1999/xhtml" className="p"><img className="image" src={useBaseUrl("/8fa82d40-22b2-11ed-9930-0242fe3e4a3f/search-plugins.png")} alt="Basic Search For Dynamic Test Suite" /></p> 

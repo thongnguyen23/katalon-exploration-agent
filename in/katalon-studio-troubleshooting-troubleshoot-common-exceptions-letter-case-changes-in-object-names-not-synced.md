@@ -1,0 +1,9 @@
+---
+hide_title: true
+title: Letter case changes in object names not synced
+---
+
+# <a id="troubleshooting-2967" class="anchor_top_offset"/><a id="ariaid-title1" class="anchor_top_offset"/>Letter case changes in object names not synced
+
+<section xmlns="http://www.w3.org/1999/xhtml" className="section condition"><p className="p">When renaming an object  by changing the letter case, these changes are not reflected in your local file or in the Git repository after committing. As a result, tests may fail with errors such as:</p><div className="p"><pre className="pre codeblock"><code>Test object with id '[Object Repository Path]' does not exist</code></pre></div></section> 
+<div xmlns="http://www.w3.org/1999/xhtml" className="bodydiv troubleSolution"><section className="section cause"><p className="p">Katalon Studio does not currently support case-sensitive updates. To ensure that changes to the letter case of an object's name are properly synced, use the following workaround:</p></section><section className="section remedy"><ol className="ol steps"><li className="li step stepexpand"><span className="ph cmd">Rename the object to a temporary name (e.g., from <span className="ph uicontrol">Button_Demo</span> to <span className="ph uicontrol">Untitled</span>). Save and commit the changes to Git.</span></li><li className="li step stepexpand"><span className="ph cmd">Rename the object to the desired name with the correct letter case (e.g., from <span className="ph uicontrol">Untitled</span> to <span className="ph uicontrol">button_demo</span>). Save and commit the changes to Git.</span><div className="itemgroup stepresult">After following the workaround, the object's name will be correctly updated in both the local project files and the Git repository.</div></li></ol></section></div>

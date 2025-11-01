@@ -1,0 +1,71 @@
+---
+title: Override test results status in Katalon TestOps (Legacy)
+---
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+Automated tests produce test results automatically. This means that test results are fixed unless you manually update the status of a test result to reflect actual expectations.
+
+In Katalon TestOps, you can edit the status of a test result and provide a reason for the change to notify your team of the change.
+
+This feature also allows you to:
+
+- Keep a clear record of why a test result has been changed, who changed it, and the reason for the change.
+- Find out whether the status of a test result has been manually modified and what was its initial status.
+- See the whole history of status changes.
+
+## Change the status of a Test Result
+:::warning notice
+Changing the status of a Test Result affects the status of a Test Run and its Test Suite. You should override Test Results statuses with caution. See [TestOps Formulas](/katalon-platform/analyze/reports/manage-reports/override-test-results-status-in-katalon-testops) for definitions of **Status (Test Run)** and **Status (Test Suite)**.
+:::
+
+Follow these steps:
+
+1. Sign in to [Katalon TestOps](https://testops.katalon.io/login) and go to your Project.
+2. Go to **Reports** > **Test Runs**.
+3. Click on a Test Run ID, then select the **Test Results** tab.
+    
+    You can see the list of all test results and their details (Status, ID, Name, Time, Assertions, Links) here.
+    
+4. Click on the *Extension* icon of the Test Result you want to change.
+    
+    <img src="https://github.com/katalon-studio/docs-images/raw/master/katalon-analytics/docs/testops-nov-release-override-test-result/extension-icon-change-test-result-status-2.png" width="700" alt="extension icon of test result screen legacy" />
+    
+5. Click **Mark as Passed** (for a **failed**/**incomplete**/**error** Test Result) or **Mark as Failed** (for a **passed** Test Result). See [TestOps Formulas](https://docs.katalon.com/katalon-platform/analyze/reports/manage-reports/override-test-results-status-in-katalon-testops#) for definitions of **Status (Test Result)**.
+    
+    A box pops up asking you to choose a reason for the status change.
+    
+    <img src="https://github.com/katalon-studio/docs-images/raw/master/katalon-analytics/docs/testops-nov-release-override-test-result/change-test-result-status-popup-2.png" width="700" alt="Comment of test result tab" />
+    
+6. Select an option, then submit the new status for this Test Result.
+
+## View status change details of a Test Result
+
+You can see the detailed information and description of a status change once the status has been modified.
+
+Select the **Test Results** tab, click on a Test Result ID, then select the **Comments** tab.
+
+<img src="https://github.com/katalon-studio/docs-images/raw/master/katalon-analytics/docs/testops-nov-release-override-test-result/Description-2.png" alt="Information icon next to the Test Result status, then click View changes log" width="700" />
+
+You can then check the following information:
+
+- the name of the member who changed the status of a Test Result.
+- the history of that Test Result's status changes.
+- the reason for each status change.
+
+## View the summary of a Test Result's status change
+
+No matter how many times a test result has been modified, you can always view the full history of changes.
+
+Follow these steps:
+
+1. Select the **Test Results** tab.
+2. Mouse over the *Information* icon next to the Test Result status, then click **View changes log**.
+    
+    ![Click View changes log](https://github.com/katalon-studio/docs-images/raw/master/katalon-analytics/docs/testops-nov-release-override-test-result/View%2520key%2520information-2.png)
+    
+
+Now you can view the following information:
+
+- the original status of a Test Result.
+- the latest status of that Test Result.
+- further detailed changes of that Test Result.

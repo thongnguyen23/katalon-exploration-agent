@@ -1,0 +1,13 @@
+---
+hide_title: true
+title: Generate qTest - Katalon Studio parity reports
+---
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+
+# <a id="task-7028" class="anchor_top_offset"/><a id="ariaid-title1" class="anchor_top_offset"/>Generate qTest - Katalon Studio parity reports
+
+<div xmlns="http://www.w3.org/1999/xhtml" className="section prereq p"><ul className="ul"><li className="li"><p className="p">qTest integration with <span className="ph">Katalon Studio</span> already configured. See: <a className="xref" href="/katalon-studio/integrations/test-management/configure-qtest-integration-in-katalon-studio">Configure qTest integration in <span className="ph">Katalon Studio</span></a>.</p></li></ul></div>
+<section xmlns="http://www.w3.org/1999/xhtml" className="section context">To enable parity report generation, follow these steps:</section> 
+<ol xmlns="http://www.w3.org/1999/xhtml" className="ol steps"><li className="li step stepexpand"><span className="ph cmd">Go to <span className="ph uicontrol">Project Settings</span> &gt; <span className="ph uicontrol">Plugins</span> &gt; <span className="ph uicontrol">qTest</span>, check the <span className="ph uicontrol">Generate the parity report after test execution</span> box.</span><div className="itemgroup stepxmp"><img className="image" width={700} src={useBaseUrl("/919186b0-22b2-11ed-9930-0242fe3e4a3f/ks-840-qtest-report.png")} alt="Project Settings qTest" /></div><div className="itemgroup stepresult"><span className="ph">Katalon Studio</span> will generate test suite and test suite collection reports when you turn on this setting. This parity report provides a quick check of the version and test step contents of your integrated test cases between two systems.</div></li><li className="li step stepexpand"><span className="ph cmd">To view the generated parity report, open the <code className="ph codeph">&lt;your-project-folder&gt;/Reports</code> folder.</span><div className="itemgroup stepxmp"><img className="image" src={useBaseUrl("https://github.com/katalon-studio/docs-images/raw/master/katalon-studio/docs/enable-qtest-integration/parity-report-html.png")} width={600} alt="Open the parity report in the project folder" /><br /><br /></div></li></ol> 
+<nav xmlns="http://www.w3.org/1999/xhtml" role="navigation" className="related-links"><div className="linklist relinfo reltasks"><strong>Related tasks</strong><br /><br /><ul className="linklist"><li className="linklist"><a className="link" href="/katalon-studio/integrations/test-analysis/qtest/view-and-upload-katalon-studio-test-execution-results-to-qtest#task-3059">Upload test suite results manually</a></li></ul></div></nav> 

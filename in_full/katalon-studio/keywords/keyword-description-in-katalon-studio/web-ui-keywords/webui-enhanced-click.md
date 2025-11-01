@@ -1,0 +1,22 @@
+---
+hide_title: true
+title: '[WebUI] Enhanced Click'
+---
+
+# <a id="id_0" class="anchor_top_offset"/><a id="ariaid-title1" class="anchor_top_offset"/>[WebUI] Enhanced Click
+
+<div xmlns="http://www.w3.org/1999/xhtml" className="note note note_note"><span className="note__title">Note:</span> <p className="p">Your Katalon Studio version must be <strong className="ph b">7.2.5+</strong>.</p></div>
+<div xmlns="http://www.w3.org/1999/xhtml" className="note warning note_warning"><span className="note__title">Warning:</span> <p className="p">This keyword uses Javascript click as the last fallback which may not have the same effect as an actual click on an element.</p></div>
+
+## Description
+
+Click on the given element using various trial-and-error methods.
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">Keyword name: <code className="ph codeph">enhancedClick</code></p> 
+
+## <a id="id_0__id_1" class="anchor_top_offset"/>Parameters
+
+<table xmlns="http://www.w3.org/1999/xhtml" className="table anchor_top_offset" id="id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2"><caption /><colgroup><col style={{width: '20%'}} /><col style={{width: '20%'}} /><col style={{width: '20%'}} /><col style={{width: '40%'}} /></colgroup><thead className="thead"><tr className><th className="entry anchor_top_offset" id="id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__1">Parameter</th><th className="entry anchor_top_offset" id="id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__2">Parameter Type</th><th className="entry anchor_top_offset" id="id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__3">Required</th><th className="entry anchor_top_offset" id="id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__4">Description</th></tr></thead><tbody className="tbody"><tr className><td className="entry" headers="id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__1 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__2 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__3 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__4 ">to</td><td className="entry" headers="id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__1 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__2 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__3 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__4 ">TestObject</td><td className="entry" headers="id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__1 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__2 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__3 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__4 ">Yes</td><td className="entry" headers="id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__1 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__2 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__3 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__4 ">An object representing a web element.</td></tr><tr className><td className="entry" headers="id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__1 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__2 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__3 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__4 ">flowControl</td><td className="entry" headers="id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__1 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__2 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__3 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__4 ">FailureHandling</td><td className="entry" headers="id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__1 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__2 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__3 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__4 ">Optional</td><td className="entry" headers="id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__1 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__2 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__3 id_0__a2967d91-edfc-4552-80a3-f501b4dc4cc2__entry__4 ">Specify <a className="xref" href="/katalon-studio/maintain-tests/configure-failure-handling-settings-in-katalon-studio">failure handling</a> schema to determine whether the execution should be allowed to continue or stop.</td></tr></tbody></table> 
+
+## Example
+
+<pre xmlns="http://www.w3.org/1999/xhtml" className="pre codeblock"><code>'Open browser and navigate to demo AUT site.'{"\n"}WebUI.openBrowser(GlobalVariable.G_SiteURL){"\n"}{"\n"}'Click on \'Book Appointment\' button'{"\n"}WebUI.enhancedClick(findTestObject('Page_CuraHomepage/btn_MakeAppointment')){"\n"}{"\n"}'Close browser'{"\n"}WebUI.closeBrowser(){"\n"}</code></pre> 

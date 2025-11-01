@@ -1,0 +1,17 @@
+---
+hide_title: true
+title: Selenium Grid - Execution on Remote Machines with Katalon Studio
+---
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+
+# <a id="id" class="anchor_top_offset"/><a id="ariaid-title1" class="anchor_top_offset"/>Selenium Grid - Execution on Remote Machines with <span xmlns="http://www.w3.org/1999/xhtml" className="ph">Katalon Studio</span>     
+
+Katalon Studio allows you to execute your scripts on remote machines by using Selenium Grid.
+
+Follow these steps to set up your remote execution with Selenium Grid:
+
+:::info notes
+Make sure that you are running Selenium Grid/ Appium Grid while executing the test. To set up and activate Selenium Grid, you can follow this Selenium document: [Set up Selenium Grid](https://www.selenium.dev/documentation/legacy/grid_3/setting_up_your_own_grid/#step-1-start-the-hub).
+:::
+<ol xmlns="http://www.w3.org/1999/xhtml" className="ol"><li className="li">     <p className="p">Open Katalon Studio and navigate to <strong className="ph b">Project &gt; Settings &gt; Desired Capabilities &gt; Remote</strong>. Enter the following information:</p>     <ul className="ul"><li className="li"> <strong className="ph b">Remote Server URL</strong>: the URL to the remote server, in the format of <code className="ph codeph">http://&lt;hub-ip-address&gt;:&lt;port&gt;/wd/hub</code>. For example: <code className="ph codeph">http://192.168.37.35:45339/wd/hub</code>.</li><li className="li"> <strong className="ph b">Remote Server type</strong>: choose <strong className="ph b">Selenium</strong>.</li></ul>   </li><li className="li">     <p className="p">Click <strong className="ph b">Add</strong> to add desired capabilities for remote execution (optional). Katalon Studio supports all Selenium Server desired capabilities. To learn more about Selenium capabilities, you can refer to the Selenium document in their Github project: <a className="xref j-external-link" href="https://github.com/SeleniumHQ/selenium/wiki/DesiredCapabilities#used-by-the-selenium-server-for-browser-selection" target="_blank">Supported capabilities</a>.</p>     <div className="note note note_note"><span className="note__title">Note:</span>        <ul className="ul"><li className="li">Desired capabilities is a JSON object (having keys and values pair). We need to set the capability <strong className="ph b">Name</strong> as <code className="ph codeph">key</code> and the capability <strong className="ph b">Value</strong> as <code className="ph codeph">value</code>.</li><li className="li">The capabilities keys are case-sensitive.</li></ul>     </div>     <p className="p"><img className="image" src={useBaseUrl("https://github.com/katalon-studio/docs-images/raw/master/katalon-studio/docs/project-settings-new-ui/KS-DC-Remote-settings.png")} width={700} alt="Add Desired Capabilities for Remote execution" /><br /><br /></p>   </li><li className="li">     <p className="p">Click <strong className="ph b">Apply and Close</strong> to save your settings.</p>   </li><li className="li">     <p className="p">In the dropdown list of the <strong className="ph b">Run</strong> button, select <strong className="ph b">Remote</strong>.</p>     <p className="p"><img className="image" src={useBaseUrl("https://github.com/katalon-studio/docs-images/raw/master/katalon-studio/docs/selenium-grid-integration/KS-DC-Run-Remote-execution.png")} width={300} alt="Run remote execution" /><br /><br /></p>   </li></ol> 

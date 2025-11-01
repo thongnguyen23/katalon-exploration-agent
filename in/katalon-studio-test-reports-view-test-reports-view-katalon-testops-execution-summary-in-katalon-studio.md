@@ -1,0 +1,12 @@
+---
+hide_title: true
+title: View Katalon TestOps execution summary in Katalon Studio
+---
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+
+# <a id="task-7177" class="anchor_top_offset"/><a id="ariaid-title1" class="anchor_top_offset"/>View <span xmlns="http://www.w3.org/1999/xhtml" className="ph">Katalon TestOps</span>  execution summary in <span xmlns="http://www.w3.org/1999/xhtml" className="ph">Katalon Studio</span> 
+
+<p xmlns="http://www.w3.org/1999/xhtml" className="shortdesc">Once executed in <span className="ph">Katalon Studio</span>, you can view the test suite execution summary and quickly navigate to test runs reports in <span className="ph">Katalon TestOps</span>.</p> 
+<div xmlns="http://www.w3.org/1999/xhtml" className="section prereq p"><ul className="ul"><li className="li">You have executed at least one test suite in <span className="ph">Katalon Studio</span>.</li></ul></div>
+<ol xmlns="http://www.w3.org/1999/xhtml" className="ol steps"><li className="li step stepexpand"><span className="ph cmd">Open <span className="ph">Katalon Studio</span>.</span></li><li className="li step stepexpand"><span className="ph cmd">On the  <span className="ph uicontrol">Tests Explorer</span> sidebar, go to       <span className="ph uicontrol">TestOps</span> &gt; <span className="ph uicontrol">Test Runs</span>.</span><div className="itemgroup info">You can view a summary of your test executions here.</div><div className="itemgroup info"><img className="image" src={useBaseUrl("/c02d65b0-1fac-11ed-9930-0242fe3e4a3f/KS-840-View-TestOps-execution-summary.png")} alt="View TestOps execution summary in Studio" /></div></li><li className="li step stepexpand"><span className="ph cmd"><strong className="ph b">Optional:</strong> You can click on the <em className="ph i">Reload</em> icon (next to <span className="ph uicontrol">View         all executions</span> in the top right corner) to view the latest       updates.</span></li><li className="li step stepexpand"><span className="ph cmd">To quickly open a test run result in <span className="ph">Katalon TestOps</span>, click a test run ID.</span><div className="itemgroup stepresult">You are navigated to the corresponding <span className="ph uicontrol">Test Run: #&lt;ID&gt;</span> page.<p className="p"><img className="image" src={useBaseUrl("/b2508ca0-1fad-11ed-9930-0242fe3e4a3f/KS-840-View-corresponding-test-runs-ID-in-TesOps.png")} alt="View corresponding test runs page" /></p></div></li></ol> 

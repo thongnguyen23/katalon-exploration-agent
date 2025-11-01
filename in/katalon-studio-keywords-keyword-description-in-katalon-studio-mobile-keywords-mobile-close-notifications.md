@@ -1,0 +1,21 @@
+---
+hide_title: true
+title: '[Mobile] Close Notifications'
+---
+
+# <a id="id_0" class="anchor_top_offset"/><a id="ariaid-title1" class="anchor_top_offset"/>[Mobile] Close Notifications
+
+
+## <a id="id_0__id_1" class="anchor_top_offset"/>Description
+
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">Simulate closing notification action on mobile device.</p> 
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">Keyword name: <code className="ph codeph">Mobile.closeNotifications</code></p> 
+
+## <a id="id_0__id_2" class="anchor_top_offset"/>Parameters
+
+<table xmlns="http://www.w3.org/1999/xhtml" className="table anchor_top_offset" id="id_0__86bda24d-aa20-47c4-b1fc-01f27cef5257"><caption /><thead className="thead"><tr className><th className="entry anchor_top_offset" id="id_0__86bda24d-aa20-47c4-b1fc-01f27cef5257__entry__1">Param</th><th className="entry anchor_top_offset" id="id_0__86bda24d-aa20-47c4-b1fc-01f27cef5257__entry__2">Param Type</th><th className="entry anchor_top_offset" id="id_0__86bda24d-aa20-47c4-b1fc-01f27cef5257__entry__3">Required</th><th className="entry anchor_top_offset" id="id_0__86bda24d-aa20-47c4-b1fc-01f27cef5257__entry__4">Description</th></tr></thead><tbody className="tbody"><tr className><td className="entry" headers="id_0__86bda24d-aa20-47c4-b1fc-01f27cef5257__entry__1 id_0__86bda24d-aa20-47c4-b1fc-01f27cef5257__entry__2 id_0__86bda24d-aa20-47c4-b1fc-01f27cef5257__entry__3 id_0__86bda24d-aa20-47c4-b1fc-01f27cef5257__entry__4 ">flowControl</td><td className="entry" headers="id_0__86bda24d-aa20-47c4-b1fc-01f27cef5257__entry__1 id_0__86bda24d-aa20-47c4-b1fc-01f27cef5257__entry__2 id_0__86bda24d-aa20-47c4-b1fc-01f27cef5257__entry__3 id_0__86bda24d-aa20-47c4-b1fc-01f27cef5257__entry__4 ">FailureHandling</td><td className="entry" headers="id_0__86bda24d-aa20-47c4-b1fc-01f27cef5257__entry__1 id_0__86bda24d-aa20-47c4-b1fc-01f27cef5257__entry__2 id_0__86bda24d-aa20-47c4-b1fc-01f27cef5257__entry__3 id_0__86bda24d-aa20-47c4-b1fc-01f27cef5257__entry__4 ">Optional</td><td className="entry" headers="id_0__86bda24d-aa20-47c4-b1fc-01f27cef5257__entry__1 id_0__86bda24d-aa20-47c4-b1fc-01f27cef5257__entry__2 id_0__86bda24d-aa20-47c4-b1fc-01f27cef5257__entry__3 id_0__86bda24d-aa20-47c4-b1fc-01f27cef5257__entry__4 ">Specify <a className="xref" href="/katalon-studio/maintain-tests/configure-failure-handling-settings-in-katalon-studio">failure handling</a> schema to determine whether the execution should be allowed to continue or stop.</td></tr></tbody></table> 
+
+## <a id="id_0__id_3" class="anchor_top_offset"/>Example 
+
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">You want close notification on the current mobile device:</p> 
+<pre xmlns="http://www.w3.org/1999/xhtml" className="pre codeblock"><code>import static com.kms.katalon.core.testcase.TestCaseFactory.findTestCase{"\n"}import static com.kms.katalon.core.testdata.TestDataFactory.findTestData{"\n"}import static com.kms.katalon.core.testobject.ObjectRepository.findTestObject{"\n"}import internal.GlobalVariable as GlobalVariable{"\n"}import com.kms.katalon.core.configuration.RunConfiguration as RunConfiguration{"\n"}import com.kms.katalon.core.mobile.keyword.MobileBuiltInKeywords as Mobile{"\n"}import com.kms.katalon.core.util.internal.PathUtil as PathUtil{"\n"}import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI{"\n"}import com.kms.katalon.core.webservice.keyword.WSBuiltInKeywords as WS{"\n"}import static com.kms.katalon.core.checkpoint.CheckpointFactory.findCheckpoint{"\n"}import com.kms.katalon.core.model.FailureHandling as FailureHandling{"\n"}import com.kms.katalon.core.testcase.TestCase as TestCase{"\n"}import com.kms.katalon.core.testdata.TestData as TestData{"\n"}import com.kms.katalon.core.testobject.TestObject as TestObject{"\n"}import com.kms.katalon.core.checkpoint.Checkpoint as Checkpoint{"\n"}{"\n"}'Start application on current selected android\'s device'{"\n"}Mobile.startApplication(GlobalVariable.G_AndroidApp, false){"\n"}{"\n"}'Close any sudden notifications'{"\n"}Mobile.closeNotifications(){"\n"}{"\n"}'Close application on current selected android\'s device'{"\n"}Mobile.closeApplication(){"\n"}</code></pre> 

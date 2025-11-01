@@ -103,6 +103,21 @@ def _token_overlap(a: str, b: str) -> float:
     return inter / denom if denom else 0.0
 
 
+def _doc_id_from_uri(uri: str) -> Optional[str]:
+    try:
+        # accept http(s) or s3 URIs; extract path and drop extension
+        m = re.match(r"^(?:https?://[^/]+|s3://[^/]+)/(?P<path>[^?]+)", uri)
+        if not m:
+            return None
+        path = m.group("path")
+        if path.endswith(".md"):
+            path = path[:-3]
+        parts = [p for p in path.split("/") if p]
+        return ".".join(parts)
+    except Exception:
+        return None
+
+
 def resolve_section_id(hit: Dict) -> Tuple[Optional[str], float, str]:
     """Return (section_id, confidence, reason). Safe for missing fields.
 
@@ -111,8 +126,6 @@ def resolve_section_id(hit: Dict) -> Tuple[Optional[str], float, str]:
     """
     meta = hit.get("metadata", {}) or {}
     doc_id = meta.get("x-amz-bedrock-kb-doc-id") or meta.get("bedrock-kb-doc-id")
-    if not doc_id:
-        return None, 0.0, "no_doc_id"
 
     snippet = hit.get("content", {})
     if isinstance(snippet, dict):
@@ -128,6 +141,13 @@ def resolve_section_id(hit: Dict) -> Tuple[Optional[str], float, str]:
         uri = ((hit.get("location", {}) or {}).get("s3Location", {}) or {}).get("uri")
         if uri and uri.startswith("s3://"):
             uri = None  # cannot fetch directly
+
+    # If doc_id is missing, try to derive it from the URI path
+    if not doc_id:
+        uri_for_doc = hit.get("presigned_url") or (((hit.get("location", {}) or {}).get("s3Location", {}) or {}).get("uri"))
+        doc_id = _doc_id_from_uri(uri_for_doc) if uri_for_doc else None
+        if not doc_id:
+            return None, 0.0, "no_doc_id"
 
     md_text: Optional[str] = _fetch_text(uri) if uri else None
     if not md_text:
@@ -156,4 +176,3 @@ def resolve_section_id(hit: Dict) -> Tuple[Optional[str], float, str]:
 
     # Last resort: first section encountered (typically H1)
     return sections[0][0], 0.3, "fallback_first_h1"
-

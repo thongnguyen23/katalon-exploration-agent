@@ -1,0 +1,35 @@
+---
+title: Load balancing for local test environments (Legacy)
+---
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import Reusable from '@site/src/reusable/Reusable.mdx';
+
+<Reusable />
+
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">With Katalon TestOps, your tests can be executed in parallel using load-balanced configurations.</p> 
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">To do so, <span className="ph">Katalon TestOps</span> distributes test executions over Agents to optimize remote execution efficiency. Each Agent can be configured with a unique threshold. Test executions can then be setup to minimize Agent idleness.</p> 
+<div xmlns="http://www.w3.org/1999/xhtml" className="note important note_important"><span className="note__title">Important:</span> <ul className="ul"><li className="li"><p className="p">You have at least one active local test environment. See: <a className="xref" href="/katalon-platform/execute/test-execution-with-testops/local-test-environments/create-a-local-test-environment-with-an-agent">Create a Local Test Environment with an Agent</a>.</p></li></ul></div>
+
+## <a id="task-1152" class="anchor_top_offset"/>Configure an Agent's threshold
+
+<p xmlns="http://www.w3.org/1999/xhtml" className="shortdesc">An Agent's threshold is the maximum number of sessions that an Agent can execute concurrently in a local test environment.</p> 
+<section xmlns="http://www.w3.org/1999/xhtml" className="section context">You must configure the threshold value to assign the number of jobs to an Agent.<div className="note note note_note"><span className="note__title">Note:</span> <ul className="ul"><li className="li"><p className="p">By default, the threshold value of all Agents is set as <strong className="ph b">1.</strong></p></li></ul></div>To configure the threshold value, follow these steps:</section> 
+<ol xmlns="http://www.w3.org/1999/xhtml" className="ol steps"><li className="li step stepexpand"><span className="ph cmd">Sign in to <a className="xref j-external-link" href="https://testops.katalon.io/login" target="_blank">Katalon TestOps</a> and go to your project. Then navigate to  <span className="ph menucascade"><span className="ph uicontrol">TestOps Settings</span><abbr title="and then"> &gt; </abbr><span className="ph uicontrol">Organization Setup</span></span>.</span><div className="itemgroup info"><img className="image" width={500} src={useBaseUrl("/cbcde300-9dea-11ee-b8c3-0242c7a41fd4/TO_December_20_2023_TestOps_Settings.png")} alt="Organization setup within the TestOps settings menu." /></div><div className="itemgroup stepresult">This shows the <span className="ph uicontrol">Test Environments</span> page. It also lists the agents you have. <img className="image" width={600} src={useBaseUrl("/cbd58420-9dea-11ee-b8c3-0242c7a41fd4/TO_Decemeber_20_2023_Test_Environments_page.png")} alt="Current Agents in Katalon TestOps." /></div></li><li className="li step stepexpand"><span className="ph cmd">Select your Test Environment from one of the tabs. </span></li><li className="li step stepexpand"><span className="ph cmd">Click on the <span className="ph uicontrol">Name</span> of the Agent you want to configure a threshold for.</span><div className="itemgroup info"><img className="image" width={600} src={useBaseUrl("/8d5b6d80-9e22-11ee-b8c3-0242c7a41fd4/TO_December_20_2023_Agent_Name_Fullscreen.png")} alt="The name of an Agent in Katalon TestOps." /></div><div className="itemgroup stepresult">This shows the Agent Details page. <img className="image" width={600} src={useBaseUrl("/8d64e360-9e22-11ee-b8c3-0242c7a41fd4/TO_December_20_2023_Agent_Details__page_2.png")} /></div></li><li className="li step stepexpand"><span className="ph cmd">Scroll down to the Threshold section and input the number of sessions you'd like your agent to execute concurrently. </span><div className="itemgroup info"><img className="image" width={400} src={useBaseUrl("/8d7c3bf0-9e22-11ee-b8c3-0242c7a41fd4/TO_Decemeber_20_2023_Threshold_Configuration.png")} alt="The threshold setting in the Agent Details page." /></div></li><li className="li step stepexpand"><span className="ph cmd">Click <span className="ph uicontrol">Update</span>.</span></li></ol> 
+<section xmlns="http://www.w3.org/1999/xhtml" className="section result">You've successfully configured the number of your agent's simultaneous executions. The maximum number of concurrent sessions that an Agent can execute is equal to the threshold value you have configured.<p className="p">You can check these sessions from the <span className="ph uicontrol">Test Environments</span> page.</p></section> 
+    
+
+## <a id="id_2" class="anchor_top_offset"/>Assign an Agent to execute Test Runs
+
+    
+          
+
+### <a id="id_3" class="anchor_top_offset"/>For a new test plan
+
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">You can create a new test runs schedule to assign an Agent for test executions. See: <a className="xref" href="/katalon-platform/execute/test-execution-with-testops/schedule-test-runs-in-testops">Schedule Test Runs</a>.</p> 
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">When creating a new test runs schedule, you are asked to select test environments. You can select an Agent here to assign it to your new test plan.</p> 
+
+### <a id="id_4" class="anchor_top_offset"/>For an existing Test Plan
+
+<ol xmlns="http://www.w3.org/1999/xhtml" className="ol"><li className="li"><p className="p">Go to your Project &gt; <strong className="ph b">Test Execution</strong> &gt; <strong className="ph b">Test Run List</strong>.</p></li><li className="li"><p className="p">Click on a Test Run List.</p><p className="p"><img className="image" src={useBaseUrl("https://github.com/katalon-studio/docs-images/raw/master/katalon-analytics/docs/testops-revamp-july-load-balancing/a-verify-match-exact-name-page-2.png")} alt="a verify match exact name page" /><br /><br /></p></li><li className="li"><p className="p">Click <strong className="ph b">Edit</strong>.</p><p className="p">The <strong className="ph b">Schedule Test Run</strong> dialog appears as below.</p><p className="p"><img className="image" src={useBaseUrl("https://github.com/katalon-studio/docs-images/raw/master/katalon-analytics/docs/testops-revamp-july-load-balancing/assign-test-environjment-agent-2.png")} alt="highlight select test environment section" /><br /><br /></p></li><li className="li"><p className="p">Go to the <strong className="ph b">Test Environments</strong> section, select a new Agent.</p></li><li className="li"><p className="p">Click <strong className="ph b">Save</strong>.</p></li></ol> 
+<div xmlns="http://www.w3.org/1999/xhtml" className="note tip note_tip"><span className="note__title">Tip:</span> <p className="p">You can reassign an old test run list or assign multiple new test run lists to any configured Agent.</p></div>
+<p xmlns="http://www.w3.org/1999/xhtml" className="p">To check the test execution process, go back to the <strong className="ph b">Test Environments</strong> page.</p> 
