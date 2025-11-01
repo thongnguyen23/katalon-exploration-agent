@@ -1,0 +1,2 @@
+How do I generate steps with AI in Katalon?
+

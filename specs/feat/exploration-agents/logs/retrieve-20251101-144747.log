@@ -1,0 +1,5 @@
+query=How do I generate steps with AI in Katalon?
+topk=3
+tta_ms=1694
+citations=3
+answer_preview=--- title: Generate test steps in Katalon Studio script view --- import useBaseUrl from '@docusaurus/useBaseUrl'; <p xmlns="http://www.w3.org/1999/xhtml" className="p">Once a new test case is created,
