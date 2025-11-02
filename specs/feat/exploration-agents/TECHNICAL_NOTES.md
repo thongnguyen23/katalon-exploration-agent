@@ -1,9 +1,9 @@
 Modules and Responsibilities
 
-- `src/exploration_agents/graph_builder.py`
-  - Parse Markdown (local dir or S3 prefix)
-  - Build edges: `next`, `prev`, `parent`, `see_also`
-  - Output JSONL: `artifacts/neighbors.jsonl`
+- `src/exploration_agents/builder_main.py` — single entrypoint (env-only)
+  - Sync S3 → `artifacts/docs` when enabled; build per-run outputs under `artifacts/runs/<run_id>/`.
+- `src/exploration_agents/ontology_graph_builder.py` — library (no CLI)
+  - Ontology-driven entities + relations + validation; emits entities/edges/neighbors + build report.
 
 - `src/exploration_agents/kb_retriever.py`
   - `kb_search(query, top_k)` → (hits, tta_ms)

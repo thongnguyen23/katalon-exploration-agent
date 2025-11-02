@@ -4,8 +4,8 @@
 - Plan: load ontology → parse markdown → detect entities → generate + validate edges → merge/weight → fanout+MMR → emit artifacts → report.
 
 2025-11-01 — Post (outcomes)
-- Added `src/exploration_agents/ontology_graph_builder.py` with CLI.
-- Script: `specs/ontology/scripts/build_graph_local.sh` (local or S3).
-- Default config: `artifacts/ontology.yaml`.
+- Added `src/exploration_agents/ontology_graph_builder.py` (library-only; no CLI).
+- Single entrypoint: `exploration_agents.builder_main` (env-only).
+- Ontology moved to `configs/ontology.yaml`, snapshot per run.
 - Emissions: entities.jsonl, edges.jsonl, neighbors.jsonl, build_report.json, edges.rejected.jsonl.
 - Next: improve detectors; add tests and demo dataset.

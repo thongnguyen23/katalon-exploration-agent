@@ -1,7 +1,7 @@
 Technical Notes — Ontology Graph Builder
 
 Modules
-- `src/exploration_agents/ontology_graph_builder.py`
+- `src/exploration_agents/ontology_graph_builder.py` — library (no CLI)
   - Ontology loading/validation (`Ontology`, `RelationRule`)
   - Markdown parsing (`parse_markdown` headings + links)
   - Entity detection (rule-based; optional LLM via LiteLLM)
@@ -10,12 +10,11 @@ Modules
   - Fanout cap + MMR (string-level Jaccard diversity)
   - Emissions: `entities.jsonl`, `edges.jsonl`, `neighbors.jsonl`, `build_report.json`, `edges.rejected.jsonl`
 
-Entry Points
-- Local build: `specs/ontology/scripts/build_graph_local.sh <docs_dir>`
-- Python: `python -m exploration_agents.ontology_graph_builder <source> --ontology artifacts/ontology.yaml`
+Entry Point (single)
+- `PYTHONPATH=src python -m exploration_agents.builder_main`
 
 Configs & Maps
-- `artifacts/ontology.yaml` — ranking defaults + relation rules.
+- `configs/ontology.yaml` — ranking defaults + relation rules.
 - Optional: `synonyms.json`, `product_map.yaml`, `entity_whitelist.txt`.
 
 Validation Tips

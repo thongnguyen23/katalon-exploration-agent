@@ -1,4 +1,4 @@
-"""Ontology-Based Graph Builder
+"""Ontology-Based Graph Builder (library only)
 
 Builds an ontology-aligned knowledge graph from Markdown (local dir or S3):
 - Extract typed entities (rule-based first, optional LLM fallback)
@@ -6,14 +6,8 @@ Builds an ontology-aligned knowledge graph from Markdown (local dir or S3):
 - Validate against ontology, merge, weight, cap fanout with MMR
 - Emit entities.jsonl, edges.jsonl, neighbors.jsonl, build_report.json, edges.rejected.jsonl
 
-CLI (example):
-    python -m exploration_agents.ontology_graph_builder docs/ \
-      --ontology artifacts/ontology.yaml \
-      --emit-entities artifacts/entities.jsonl \
-      --emit-edges artifacts/edges.jsonl \
-      --emit-neighbors artifacts/neighbors.jsonl \
-      --enable-llm-entity false \
-      --fanout-cap 20 --mmr-lambda 0.3
+Use `python -m exploration_agents.builder_main` as the single entrypoint for
+building graphs. This module exposes only the `build_graph(...)` function.
 """
 
 from __future__ import annotations
@@ -822,42 +816,4 @@ def build_graph(
     return report
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description="Ontology-based Graph Builder")
-    parser.add_argument("source", help="Local directory or s3://bucket/prefix")
-    parser.add_argument("--ontology", required=True, help="Path to ontology.yaml")
-    parser.add_argument("--emit-entities", default="artifacts/entities.jsonl")
-    parser.add_argument("--emit-edges", default="artifacts/edges.jsonl")
-    parser.add_argument("--emit-neighbors", default="artifacts/neighbors.jsonl")
-    parser.add_argument("--synonyms", default=None, help="Optional synonyms.json path")
-    parser.add_argument("--product-map", default=None, help="Optional product_map.yaml path")
-    parser.add_argument("--entity-whitelist", default=None, help="Optional whitelist file (one id per line)")
-    parser.add_argument("--enable-llm-entity", default="false")
-    parser.add_argument("--llm-provider", default="openai")
-    parser.add_argument("--llm-model", default="gpt-4o-mini")
-    parser.add_argument("--fanout-cap", type=int, default=None)
-    parser.add_argument("--mmr-lambda", type=float, default=None)
-    args = parser.parse_args()
-
-    enable_llm = str(args.enable_llm_entity).lower() in ("1", "true", "yes", "on")
-
-    report = build_graph(
-        source=args.source,
-        ontology_path=args.ontology,
-        emit_entities=args.emit_entities,
-        emit_edges=args.emit_edges,
-        emit_neighbors=args.emit_neighbors,
-        synonyms_json=args.synonyms,
-        product_map_yaml=args.product_map,
-        entity_whitelist=args.entity_whitelist,
-        enable_llm_entity=enable_llm,
-        llm_provider=args.llm_provider,
-        llm_model=args.llm_model,
-        fanout_cap=args.fanout_cap,
-        mmr_lambda=args.mmr_lambda,
-    )
-    print(json.dumps(report, ensure_ascii=False))
-
-
-if __name__ == "__main__":
-    main()
+# CLI removed; use exploration_agents.builder_main as the single entrypoint.

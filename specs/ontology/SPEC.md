@@ -89,16 +89,16 @@ x-description, x-ui_label {vi,en}, x-detect_rules, x-examples, x-ui_badge, x-evi
   8.	Emit edges.jsonl, neighbors.jsonl
   9.	Validate report (no orphan nodes, no NEXT_STEP cycles, coverage ≥ 90%)
 
-7  CLI Usage
+7  CLI Usage (single entrypoint)
 
-specs/.../build_graph_local.sh docs/ \
-  --ontology artifacts/ontology.yaml \
-  --emit-entities artifacts/entities.jsonl \
-  --emit-edges artifacts/edges.jsonl \
-  --emit-neighbors artifacts/neighbors.jsonl \
-  --enable-llm-entity true \
-  --llm-provider openai --llm-model gpt-4o-mini \
-  --fanout-cap 20 --mmr-lambda 0.3
+PYTHONPATH=src python -m exploration_agents.builder_main
+
+Config only via environment (.venv). Key envs:
+- DOCS_S3/EA_S3 (optional, if SYNC_TO_LOCAL=true)
+- SYNC_TO_LOCAL=true|false (default true) — if true, sync to artifacts/docs
+- RUN_ID (optional) — outputs under artifacts/runs/<run_id>
+- ONTOLOGY_FILE=configs/ontology.yaml (default)
+- GRAPH_FILE auto-set to this run’s neighbors.jsonl if unset
 
 8  Runtime Ranking Rules
 
