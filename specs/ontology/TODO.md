@@ -1,0 +1,5 @@
+- Expand entity detectors (Product folders, Feature list from ontology).
+- Cache LLM extractions (JSON cache by doc_id + title hash).
+- Add cross-doc NEXT_STEP templates beyond directory heuristics.
+- Write unit tests for weighting/MMR/validation.
+- Integrate runtime suggestion test for "Create Test Case".

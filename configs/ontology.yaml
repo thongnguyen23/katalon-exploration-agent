@@ -1,0 +1,53 @@
+version: 0.2
+updated_at: 2025-11-01
+owner: ai-platform@katalon
+review_process: "Docs + AI weekly review / PR approval"
+
+ranking:
+  defaults:
+    relation_weights:
+      NEXT_STEP: 0.95
+      DEPENDS_ON: 0.90
+      USES: 0.85
+      BELONGS_TO: 0.90
+      TROUBLESHOOTS: 0.80
+      SEE_ALSO: 0.70
+      MENTIONED_IN: 0.60
+    fanout_cap_per_rel: 20
+    mmr_lambda: 0.3
+
+evidence_policy:
+  min_sources_per_edge: 1
+  require_sources_field: true
+
+relations:
+  - name: BELONGS_TO
+    from: [Feature, Concept, HowTo, API]
+    to: [Product]
+    weight: 0.90
+  - name: DEPENDS_ON
+    from: [HowTo]
+    to: [Concept, Feature]
+    weight: 0.90
+  - name: NEXT_STEP
+    from: [HowTo]
+    to: [HowTo]
+    weight: 0.95
+    acyclic: true
+  - name: USES
+    from: [HowTo, Concept]
+    to: [API, Feature]
+    weight: 0.85
+  - name: TROUBLESHOOTS
+    from: [Troubleshooting]
+    to: [HowTo, Feature]
+    weight: 0.80
+  - name: SEE_ALSO
+    from: [Product, Feature, Concept, HowTo, API, Troubleshooting]
+    to:   [Product, Feature, Concept, HowTo, API, Troubleshooting]
+    weight: 0.70
+  - name: MENTIONED_IN
+    from: [Product, Feature, Concept, HowTo, API, Troubleshooting]
+    to: [Section]
+    weight: 0.60
+
