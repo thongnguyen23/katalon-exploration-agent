@@ -233,13 +233,6 @@ class SectionProviderKB:
         if cached is not None:
             return cached
 
-        # Local provider path for offline/demo usage
-        if (self.endpoint or "").lower() == "local" or not (self.index or os.getenv("KB_ID") or os.getenv("KNOWLEDGE_BASE_ID")):
-            hits, elapsed = self._local_topk(query, k or self.default_topk)
-            out = (hits, elapsed)
-            self.cache_topk.set(key, out)
-            return out
-
         timeout_ms = int(os.getenv("KB_TIMEOUT_MS", "1100"))
         t0 = _now_ms()
         try:
@@ -300,61 +293,6 @@ class SectionProviderKB:
         out = (norm_hits, elapsed)
         self.cache_topk.set(key, out)
         return out
-
-    def _local_topk(self, query: str, k: int) -> Tuple[List[Dict[str, Any]], int]:
-        from exploration_agents.ontology_graph_builder import slugify
-        from exploration_agents.section_resolver import _parse_sections
-
-        src_dirs = []
-        env_dir = os.getenv("LOCAL_DOCS_DIR")
-        if env_dir:
-            src_dirs.append(env_dir)
-        # Include common mirrors if available
-        for d in ("in_full", "in", "specs/ontology/demo_docs"):
-            if d not in src_dirs:
-                src_dirs.append(d)
-
-        t0 = _now_ms()
-        hits: List[Dict[str, Any]] = []
-        seen = set()
-        q = query.strip()
-        for root in src_dirs:
-            if not os.path.isdir(root):
-                continue
-            for dirpath, _, filenames in os.walk(root):
-                for fn in filenames:
-                    if not fn.endswith('.md'):
-                        continue
-                    full = os.path.join(dirpath, fn)
-                    rel = os.path.relpath(full, root).replace('\\','/')
-                    doc_id = rel[:-3]
-                    doc_id = '.'.join([p for p in doc_id.split('/') if p])
-                    try:
-                        md = _read_file_text(Path(full)) or ""
-                    except Exception:
-                        md = ""
-                    if not md:
-                        continue
-                    sections = _parse_sections(doc_id, md)
-                    for sid, body in sections:
-                        if sid in seen:
-                            continue
-                        seen.add(sid)
-                        text = body.strip()
-                        # score by simple mixture of contains and ratio
-                        base = 0.0
-                        if q and q.lower() in (doc_id.lower() + " " + text.lower()):
-                            base += 0.5
-                        base += 0.5 * _seq_ratio(q, (doc_id + " " + text)[:500])
-                        if base <= 0.1:
-                            continue
-                        # derive short title from section tail
-                        tail = sid[len(doc_id) + 1 :] if sid.startswith(doc_id + ".") else sid
-                        title = tail.replace('.', ' ').strip().title()
-                        hits.append({"id": sid, "doc_id": doc_id, "title": title, "text": text[:220], "score": base})
-        # sort and cap
-        hits.sort(key=lambda h: float(h.get("score", 0.0)), reverse=True)
-        return hits[:k], _now_ms() - t0
 
     def by_entity(self, entity_id: str, index: GraphIndex, limit: int = 1) -> List[str]:
         key = f"e::{entity_id}::{limit}"
