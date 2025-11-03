@@ -20,34 +20,117 @@ evidence_policy:
   min_sources_per_edge: 1
   require_sources_field: true
 
+# --- New: entity types with minimal x-annotations for detection/UI ---
+entity_types:
+  - name: Product
+    id_prefix: "product:"
+    x-description: "Top-level Katalon products/modules."
+    x-detect_rules:
+      - path_prefix: ["katalon-studio/", "testops/", "testcloud/"]
+    x-examples: ["Katalon Studio", "TestOps", "TestCloud"]
+    x-ui_label: { vi: "Sản phẩm", en: "Product" }
+
+  - name: Feature
+    id_prefix: "feature:"
+    x-description: "Concrete capability under a product."
+    x-detect_rules:
+      - filename_contains: ["smart-wait","object-spy","record","data-driven"]
+    x-examples: ["Smart Wait","Object Spy","Record & Playback"]
+    x-ui_label: { vi: "Tính năng", en: "Feature" }
+
+  - name: Concept
+    id_prefix: "concept:"
+    x-description: "Core testing concept or artifact."
+    x-detect_rules:
+      - filename_contains: ["test-case","test-suite","object-repository","test-object","profile"]
+    x-examples: ["Test Case","Test Suite","Test Object","Object Repository"]
+    x-ui_label: { vi: "Khái niệm", en: "Concept" }
+
+  - name: HowTo
+    id_prefix: "howto:"
+    x-description: "Task-oriented guide: Create/Run/Configure/Debug."
+    x-detect_rules:
+      - filename_prefix: ["create-","run-","configure-","debug-","record-"]
+    x-examples: ["Create Test Case","Run Test Suite","Configure Project Settings"]
+    x-ui_label: { vi: "Hướng dẫn", en: "How-To" }
+
+  - name: API
+    id_prefix: "api:"
+    x-description: "Script-level keyword/method."
+    x-detect_rules:
+      - code_like: ["webui.", "ws.", "mobile.", "cucumber."]
+    x-examples: ["WebUI.click","WebUI.setText","WS.sendRequest"]
+    x-ui_label: { vi: "API/Keyword", en: "API/Keyword" }
+
+  - name: Troubleshooting
+    id_prefix: "trouble:"
+    x-description: "Problems and fixes."
+    x-detect_rules:
+      - filename_contains: ["troubleshoot","failed","error","not-clickable","timeout"]
+    x-examples: ["Failed Execution","Element not clickable","Timeout"]
+    x-ui_label: { vi: "Khắc phục sự cố", en: "Troubleshooting" }
+
+  - name: Section
+    id_prefix: "section:"
+    materialized: false
+    x-description: "Documentation chunk used as evidence (KB section)."
+    x-ui_label: { vi: "Mục", en: "Section" }
+
+# --- Updated: relations with default_weight, constraints, and UI badges ---
 relations:
   - name: BELONGS_TO
     from: [Feature, Concept, HowTo, API]
     to: [Product]
-    weight: 0.90
+    default_weight: 0.90
+    x-description: "Entity belongs to a product scope."
+    x-evidence_min: 1
+    x-ui_badge: { vi: "Thuộc", en: "Belongs to" }
+
   - name: DEPENDS_ON
     from: [HowTo]
     to: [Concept, Feature]
-    weight: 0.90
+    default_weight: 0.90
+    x-description: "A How-To requires the concept/feature as prerequisite."
+    x-evidence_min: 1
+    x-ui_badge: { vi: "Phụ thuộc", en: "Depends on" }
+
   - name: NEXT_STEP
     from: [HowTo]
     to: [HowTo]
-    weight: 0.95
-    acyclic: true
+    default_weight: 0.95
+    constraints: { acyclic: true }
+    x-description: "Next logical tutorial/action in the workflow."
+    x-evidence_min: 1
+    x-ui_badge: { vi: "Bước tiếp theo", en: "Next step" }
+
   - name: USES
     from: [HowTo, Concept]
     to: [API, Feature]
-    weight: 0.85
+    default_weight: 0.85
+    x-description: "Guide or concept uses this API/Feature."
+    x-evidence_min: 1
+    x-ui_badge: { vi: "Sử dụng", en: "Uses" }
+
   - name: TROUBLESHOOTS
     from: [Troubleshooting]
     to: [HowTo, Feature]
-    weight: 0.80
+    default_weight: 0.80
+    x-description: "Troubleshooting content addresses a How-To/Feature."
+    x-evidence_min: 1
+    x-ui_badge: { vi: "Khắc phục", en: "Troubleshoots" }
+
   - name: SEE_ALSO
     from: [Product, Feature, Concept, HowTo, API, Troubleshooting]
     to:   [Product, Feature, Concept, HowTo, API, Troubleshooting]
-    weight: 0.70
+    default_weight: 0.70
+    x-description: "Related topic via cross-reference."
+    x-evidence_min: 1
+    x-ui_badge: { vi: "Xem thêm", en: "See also" }
+
   - name: MENTIONED_IN
     from: [Product, Feature, Concept, HowTo, API, Troubleshooting]
     to: [Section]
-    weight: 0.60
-
+    default_weight: 0.60
+    x-description: "Connects an entity to its evidence section."
+    x-evidence_min: 1
+    x-ui_badge: { vi: "Bằng chứng", en: "Evidence" }
