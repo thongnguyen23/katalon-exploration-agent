@@ -1,3 +1,0 @@
-- Spec added and scaffolded (2025-11-03).
-- Implementation: pending — CLI + retrieval engine to add.
-- Next: add modules, wire config, validate on sample query.
