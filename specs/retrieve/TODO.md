@@ -1,0 +1,9 @@
+- [x] Wire SectionProviderKB to existing Bedrock retriever.
+- [x] Build indices: entities_by_id, alias_index, neighbors_idx, mentioned_in_rev.
+- [x] Implement seed extraction (reverse MENTIONED_IN → alias fuzz).
+- [x] Graph expand 1–2 hops with ontology weights and scope filter.
+- [x] Evidence lookup via KB.by_entity(); drop candidates with no evidence.
+- [x] MMR selection (λ=0.3); avoid evidence overlap with main sections.
+- [x] Render answer preview (≥2 citations) and suggestions (≥1 hop-1, ≥1 hop-2).
+- [x] CLI: `retrieve_main.py --query "..."` with `.env` config and caching.
+- [x] Docs: update `scripts/README.md`, `USER_GUIDE.md` usage and limits.
