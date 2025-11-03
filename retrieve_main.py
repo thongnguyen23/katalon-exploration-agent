@@ -9,7 +9,7 @@ import time
 from pathlib import Path
 
 from shared import load_config, get_env
-from src.retrieve_kb2hops import GraphIndex, SectionProviderKB, RetrieveEngine
+from exploration_agents.retrieve_kb2hops import GraphIndex, SectionProviderKB, RetrieveEngine
 
 
 def _env(key: str, default: str) -> str:
@@ -75,4 +75,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
