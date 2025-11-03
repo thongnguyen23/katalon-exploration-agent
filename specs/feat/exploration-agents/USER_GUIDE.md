@@ -5,9 +5,8 @@ What it does
 
 How to use
 - Configure `.env` with `AWS_REGION`, `KB_ID`, and graph params.
-- Build the neighbors graph once:
-  - Local: `specs/feat/exploration-agents/scripts/build_graph_local.sh <docs_dir>`
-  - S3: `specs/feat/exploration-agents/scripts/build_graph_s3.sh s3://bucket/prefix`
+- Build the neighbors graph once (single entrypoint):
+  - `PYTHONPATH=src python -m exploration_agents.builder_main`
 - From Python, call:
   - `from exploration_agents import retrieve_context`
   - `retrieve_context("How do I create a token?")`
@@ -23,4 +22,3 @@ Response schema
 Limits
 - Requires valid AWS credentials with access to Bedrock KB and S3.
 - Graph suggestions depend on Markdown heading structure and links.
-

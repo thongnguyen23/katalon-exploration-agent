@@ -1,0 +1,3 @@
+- Confirm canonical product folder mapping (product_map.yaml). Current heuristics: `katalon-studio`→Katalon Studio; `testops|katalon-platform`→TestOps.
+- Provide `synonyms.json` and `entity_whitelist.txt` if stricter control is desired.
+- Supply a small docs slice for demo acceptance validation.

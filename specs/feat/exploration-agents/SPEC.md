@@ -67,13 +67,10 @@ Returned by Bedrock:
 
 5. Key Modules to Implement
 
-5.1 graph_builder.py
-- Input: local or S3 Markdown files.
-- Parse heading hierarchy → create edges:
-- next, prev — sequential sections.
-- parent — based on heading level.
-- see_also — from intra-doc links ([text](#anchor)).
-- Output: artifacts/neighbors.jsonl.
+5.1 Graph Build (ontology)
+- Entry: `PYTHONPATH=src python -m exploration_agents.builder_main` (env-only)
+- Input: local or S3 Markdown files (synced to artifacts/docs when SYNC_TO_LOCAL=true).
+- Output per run: artifacts/runs/<run_id>/{entities.jsonl,edges.jsonl,neighbors.jsonl,build_report.json}.
 
 5.2 kb_retriever.py
 - Input: query text.
@@ -117,7 +114,7 @@ NEXTSTEP_MIN_W=0.6
 GRAPH_FILE=artifacts/neighbors.jsonl
 
 7. Execution Flow
-1) Preprocess: run graph_builder.py once to generate neighbors.jsonl.
+1) Preprocess: run the env-only builder to generate neighbors.jsonl.
 2) Runtime: start ADK agent → load graph → listen for queries.
 3) Each query:
    - Retrieve from KB → get answer + metadata.
@@ -146,6 +143,6 @@ GRAPH_FILE=artifacts/neighbors.jsonl
 10. Success Condition
 
 Implementation is complete when:
-- graph_builder.py successfully generates neighbors.jsonl.
+- builder_main successfully generates neighbors.jsonl.
 - retrieve_context() returns valid answer, citations, and ≥1 next_step.
 - Average latency (TTA) < 600 ms per query.
