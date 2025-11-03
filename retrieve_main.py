@@ -8,6 +8,12 @@ import sys
 import time
 from pathlib import Path
 
+# Ensure `src/` is importable when running as a standalone script
+_ROOT = Path(__file__).parent
+_SRC = _ROOT / "src"
+if str(_SRC) not in sys.path:
+    sys.path.insert(0, str(_SRC))
+
 from shared import load_config, get_env
 from exploration_agents.retrieve_kb2hops import GraphIndex, SectionProviderKB, RetrieveEngine
 
@@ -54,6 +60,18 @@ def main(argv: list[str] | None = None) -> int:
     # Indices
     g = GraphIndex(graph_dir=graph_dir, entities_file=entities_file, neighbors_file=neighbors_file)
     g.load()
+    # Fallback: if configured GRAPH_DIR does not exist or has no neighbors, try latest run under artifacts/runs
+    if not g.neighbors_idx:
+        cfg_dir = Path(graph_dir)
+        if not cfg_dir.exists():
+            runs_root = Path("artifacts/runs")
+            if runs_root.exists():
+                run_ids = sorted([p.name for p in runs_root.iterdir() if p.is_dir()])
+                if run_ids:
+                    latest = runs_root / run_ids[-1]
+                    logging.warning("GRAPH_DIR %s not found; falling back to latest run %s", graph_dir, latest)
+                    g = GraphIndex(graph_dir=str(latest), entities_file=entities_file, neighbors_file=neighbors_file)
+                    g.load()
 
     provider = SectionProviderKB(endpoint=_env("KB_ENDPOINT", None), index=_env("KB_INDEX", None), topk=kb_topk, ttl_sec=_int_env("CACHE_TTL_SEC", 60))
     engine = RetrieveEngine(provider=provider, g=g, ontology_path=ontology_path, limit=limit)

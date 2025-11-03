@@ -12,6 +12,7 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple
 import yaml  # type: ignore
 
 from shared import load_config, get_env
+from shared.config import get_env_bool
 from exploration_agents.kb_retriever import kb_search
 from exploration_agents.section_resolver import section_snippet_from_text
 
@@ -184,15 +185,32 @@ class GraphIndex:
                                 self.mentioned_in_rev[nid2].append(nid)
                     self.neighbors_idx[nid] = norm
 
+    def product_of(self, entity_id: str) -> Optional[str]:
+        # Direct product
+        ent = self.entities_by_id.get(entity_id)
+        if ent and ent.type == "Product":
+            return ent.id
+        # Graph BELONGS_TO
+        for n in self.neighbors_idx.get(entity_id, []):
+            if n.get("rel") == "BELONGS_TO":
+                return n.get("id")
+        # Infer from doc_id prefix
+        root = (entity_id.split(".")[0] if "." in entity_id else entity_id).lower()
+        if root.startswith("katalon-studio"):
+            return "Katalon Studio"
+        if any(x in entity_id.lower() for x in ("katalon-platform", "testops")):
+            return "TestOps"
+        if root.startswith("katalon-truetest"):
+            return "TrueTest"
+        if root.startswith("katalon-testcloud"):
+            return "TestCloud"
+        return None
+
     def in_scope(self, entity_id: str, product_scope: Optional[str]) -> bool:
         if not product_scope:
             return True
-        # consider entity in scope if there is a BELONGS_TO edge to product_scope
-        for n in self.neighbors_idx.get(entity_id, []):
-            if n["rel"] == "BELONGS_TO" and n["id"] == product_scope:
-                return True
-        # allow the product entity itself
-        return entity_id == product_scope
+        p = self.product_of(entity_id)
+        return (p == product_scope) or (entity_id == product_scope)
 
 
 # ------------------------------
@@ -233,6 +251,13 @@ class SectionProviderKB:
         if cached is not None:
             return cached
 
+        # Local/demo mode: search local markdown sections instead of Bedrock KB
+        if (self.endpoint or "").lower() == "local":
+            hits, elapsed = self._local_topk(query, k or self.default_topk)
+            out = (hits, elapsed)
+            self.cache_topk.set(key, out)
+            return out
+
         timeout_ms = int(os.getenv("KB_TIMEOUT_MS", "1100"))
         t0 = _now_ms()
         try:
@@ -263,7 +288,10 @@ class SectionProviderKB:
             # Resolve section_id by fetching local/s3 content through existing logic
             from exploration_agents.section_resolver import resolve_section_id
 
-            sec_id, _conf, _reason = resolve_section_id(h)
+            try:
+                sec_id, _conf, _reason = resolve_section_id(h)
+            except Exception:
+                continue
             if not sec_id:
                 continue
             # derive doc_id by scanning local paths
@@ -294,31 +322,92 @@ class SectionProviderKB:
         self.cache_topk.set(key, out)
         return out
 
-    def by_entity(self, entity_id: str, index: GraphIndex, limit: int = 1) -> List[str]:
+    def _local_topk(self, query: str, k: int) -> Tuple[List[Dict[str, Any]], int]:
+        # Lightweight local search over markdown files for demo/offline usage
+        from exploration_agents.section_resolver import _parse_sections
+
+        roots: List[str] = []
+        env_dir = os.getenv("LOCAL_DOCS_DIR")
+        if env_dir:
+            roots.append(env_dir)
+        for d in ("in_full", "in", "specs/ontology/demo_docs"):
+            if d not in roots:
+                roots.append(d)
+
+        t0 = _now_ms()
+        hits: List[Dict[str, Any]] = []
+        q = (query or "").strip()
+        for root in roots:
+            if not os.path.isdir(root):
+                continue
+            for dirpath, _, filenames in os.walk(root):
+                for fn in filenames:
+                    if not fn.endswith(".md"):
+                        continue
+                    full = os.path.join(dirpath, fn)
+                    rel = os.path.relpath(full, root).replace("\\", "/")
+                    doc_id = ".".join([p for p in rel[:-3].split("/") if p])
+                    md = _read_file_text(Path(full)) or ""
+                    if not md:
+                        continue
+                    for sid, body in _parse_sections(doc_id, md):
+                        text = (body or "").strip()
+                        score = 0.0
+                        hay = (doc_id + " " + text).lower()
+                        if q and q.lower() in hay:
+                            score += 0.5
+                        score += 0.5 * _seq_ratio(q, hay[:500])
+                        if score <= 0.1:
+                            continue
+                        tail = sid[len(doc_id) + 1 :] if sid.startswith(doc_id + ".") else sid
+                        title = tail.replace(".", " ").strip().title()
+                        hits.append({
+                            "id": sid,
+                            "doc_id": doc_id,
+                            "title": title,
+                            "text": text[:220],
+                            "score": score,
+                        })
+        hits.sort(key=lambda h: float(h.get("score", 0.0)), reverse=True)
+        return hits[:k], _now_ms() - t0
+
+    def by_entity(self, entity_id: str, index: GraphIndex, limit: int = 1, query_context: Optional[str] = None) -> List[str]:
         key = f"e::{entity_id}::{limit}"
         cached = self.cache_by_entity.get(key)
         if cached is not None:
             return cached
 
-        # 1) Prefer sources from entities.jsonl (map to section ids)
+        # Try KB search first (more likely to return a precise section), then fall back to sources
         e = index.entities_by_id.get(entity_id)
         out: List[str] = []
-        if e and e.sources:
-            for doc_id in e.sources[: limit * 2]:
-                # Prefer a first section for doc if available
-                from exploration_agents.neighbors import first_section_for_doc
-
-                sid = first_section_for_doc(doc_id) or doc_id
-                out.append(sid)
+        phrases: List[str] = []
+        if e:
+            phrases = [e.id] + [a for a in e.aliases if isinstance(a, str)]
+        else:
+            phrases = [entity_id]
+        # Include a context-augmented phrase if provided
+        if query_context:
+            q = query_context.strip()
+            for p in phrases[:2]:
+                phrases.append(f"{p} {q}")
+        # KB search attempt
+        for ph in phrases:
+            hits, _ = self.topk(ph, k=5)
+            for h in hits[:2]:
+                sid = h.get("id")
+                if sid and sid not in out:
+                    out.append(sid)
                 if len(out) >= limit:
                     break
-
-        # 2) Fallback: alias search via KB query
-        if not out and e:
-            for al in [e.id] + e.aliases:
-                hits, _ = self.topk(al, k=5)
-                if hits:
-                    out.append(hits[0]["id"])  # section id
+            if len(out) >= limit:
+                break
+        # Fallback to sources from entities.jsonl
+        if len(out) < limit and e and e.sources:
+            for doc_id in e.sources:
+                from exploration_agents.neighbors import first_section_for_doc
+                sid = first_section_for_doc(doc_id) or doc_id
+                if sid not in out:
+                    out.append(sid)
                 if len(out) >= limit:
                     break
 
@@ -337,6 +426,7 @@ class RetrieveEngine:
         self.g = g
         self.limit = limit
         self.rel_w, self.fanout_cap, self.mmr_lambda = _load_ontology_weights(ontology_path)
+        self.strict_scope = get_env_bool("STRICT_PRODUCT_SCOPE", False)
 
     def _rel_weight(self, rel: str) -> float:
         return float(self.rel_w.get(rel, _default_rel_weights().get(rel, 0.7)))
@@ -393,7 +483,7 @@ class RetrieveEngine:
         # Dedupe by doc
         main_sections = self._dedupe_by_doc([h["id"] for h in hits])
 
-        # Seeds via reverse MENTIONED_IN else alias
+        # Seeds via reverse MENTIONED_IN else alias (include query aliases to avoid product-only seeds)
         seed_counts: Dict[str, int] = collections.Counter()
         for sid in main_sections:
             for eid in self.g.mentioned_in_rev.get(sid, []):
@@ -402,14 +492,44 @@ class RetrieveEngine:
                 text = (hits_map.get(sid, {}).get("title", "") + " " + hits_map.get(sid, {}).get("text", "")[:300])
                 for eid in self._alias_guess(text):
                     seed_counts[eid] += 1
-        seeds = [eid for eid, _ in seed_counts.most_common(3)]
+        # Also mine aliases directly from the user query
+        for eid in self._alias_guess(query):
+            seed_counts[eid] += 1
+        # Prefer non-Product seeds when available
+        type_bias = {"HowTo": 3, "Concept": 2, "Feature": 2, "API": 1.5, "Product": 1}
+        def _score_seed(eid: str) -> float:
+            et = (self.g.entities_by_id.get(eid) or Entity(eid, "", [], [])).type
+            return seed_counts[eid] * type_bias.get(et, 1)
+        seeds = sorted(seed_counts.keys(), key=_score_seed, reverse=True)[:3]
+        # Ensure at least one non-Product if available
+        if seeds and all((self.g.entities_by_id.get(s) or Entity(s, "", [], [])).type == "Product" for s in seeds):
+            non_prod = [s for s in seed_counts.keys() if (self.g.entities_by_id.get(s) or Entity(s, "", [], [])).type != "Product"]
+            if non_prod:
+                seeds = [non_prod[0]] + seeds[:2]
         if not seeds:
             # fallback: choose a common Product if any
             products = [e.id for e in self.g.entities_by_id.values() if e.type == "Product"]
             if products:
                 seeds = products[:1]
 
-        product_scope = self._majority_product(seeds)
+        # Product scope selection
+        product_scope: Optional[str] = None
+        if self.strict_scope:
+            # If any Product seed exists, lock to it; else infer from main sections
+            prod_seeds = [s for s in seeds if (self.g.entities_by_id.get(s) or Entity(s, "", [], [])).type == "Product"]
+            if prod_seeds:
+                # pick the most frequent by seed_counts, then first
+                prod_seeds.sort(key=lambda s: seed_counts.get(s, 0), reverse=True)
+                product_scope = prod_seeds[0]
+            else:
+                # infer from main sections' products (majority)
+                prods = [self.g.product_of(sid) for sid in main_sections]
+                prods = [p for p in prods if p]
+                if prods:
+                    from collections import Counter
+                    product_scope = Counter(prods).most_common(1)[0][0]
+        else:
+            product_scope = self._majority_product(seeds)
 
         # Hop-1
         h1_list: List[Dict[str, Any]] = []
@@ -417,7 +537,7 @@ class RetrieveEngine:
             for n1 in self.g.neighbors_idx.get(s, []):
                 if product_scope and not self.g.in_scope(n1["id"], product_scope):
                     continue
-                ev = self.provider.by_entity(n1["id"], index=self.g, limit=1)
+                ev = self.provider.by_entity(n1["id"], index=self.g, limit=1, query_context=query)
                 if not ev:
                     continue
                 score1 = 0.7 * self._rel_weight(n1["rel"]) + 0.3 * float(n1.get("w", 0.0))
@@ -433,7 +553,7 @@ class RetrieveEngine:
                     continue  # avoid 2-edge loop
                 if product_scope and not self.g.in_scope(n2["id"], product_scope):
                     continue
-                ev2 = self.provider.by_entity(n2["id"], index=self.g, limit=1)
+                ev2 = self.provider.by_entity(n2["id"], index=self.g, limit=1, query_context=query)
                 if not ev2:
                     continue
                 score2 = 0.7 * self._rel_weight(n2["rel"]) + 0.3 * float(n2.get("w", 0.0))
@@ -488,6 +608,9 @@ class RetrieveEngine:
         # Drop suggestions whose evidence overlaps with main sections
         main_set = set(main_sections)
         cands = [c for c in cands if not (set(c.get("evidence", [])) & main_set)]
+        # Enforce strict scope at candidate stage as well
+        if product_scope:
+            cands = [c for c in cands if self.g.in_scope(c["target"], product_scope)]
 
         # Deduplicate by target keep highest score
         best: Dict[str, Dict[str, Any]] = {}
@@ -526,4 +649,3 @@ class RetrieveEngine:
             "answer_preview": preview,
             "debug": {"tta_ms": int(tta_ms), "limit": self.limit},
         }
-
